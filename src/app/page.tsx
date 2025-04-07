@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Header from '@/components/layout/Header';
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -24,26 +25,29 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md text-center">
-        <h1 className="text-3xl font-bold mb-6">Bienvenue</h1>
-        
-        <div className="space-y-4">
-          <Link 
-            href="/login" 
-            className="w-full block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-          >
-            Se connecter
-          </Link>
+    <div className="min-h-screen bg-gray-100 flex flex-col">
+      <Header />
+      <main className="flex-grow flex items-center justify-center p-4">
+        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md text-center">
+          <h1 className="text-3xl font-bold mb-6">Bienvenue sur Storia</h1>
           
-          <Link 
-            href="/list" 
-            className="w-full block px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
-          >
-            Voir la liste publique
-          </Link>
+          <div className="space-y-4">
+            <Link 
+              href="/login" 
+              className="w-full block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+            >
+              Se connecter
+            </Link>
+            
+            <Link 
+              href="/list" 
+              className="w-full block px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+            >
+              Voir la liste publique
+            </Link>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
