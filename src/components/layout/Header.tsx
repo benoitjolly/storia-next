@@ -23,9 +23,14 @@ export default function Header() {
                 Liste
               </Link>
               {isAuthenticated && (
-                <Link href="/home" className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-                  Accueil
-                </Link>
+                <>
+                  <Link href="/home" className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                    Accueil
+                  </Link>
+                  <Link href="/generepodcast" className="text-indigo-600 hover:text-indigo-900 px-3 py-2 rounded-md text-sm font-medium">
+                    Générer un podcast
+                  </Link>
+                </>
               )}
             </nav>
           </div>
