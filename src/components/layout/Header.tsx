@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useAuthContext } from '@/store/AuthContext';
+import NotificationCenter from '@/components/ui/NotificationCenter';
 
 export default function Header() {
   const { isAuthenticated, signOut, user } = useAuthContext();
@@ -29,6 +30,8 @@ export default function Header() {
             </nav>
           </div>
           <div className="flex items-center space-x-4">
+            {isAuthenticated && <NotificationCenter />}
+            
             {isAuthenticated ? (
               <>
                 <span className="text-sm text-gray-500">
