@@ -21,6 +21,7 @@ type PodcastResult = {
   format: string;
   url: string;
   createdAt: string;
+  transcript?: string;
 };
 
 const initialFormData: PodcastFormData = {
@@ -38,6 +39,7 @@ export default function GenerePodcastPage() {
   const [generationStatus, setGenerationStatus] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
   const [podcastResult, setPodcastResult] = useState<PodcastResult | null>(null);
+  const [showTranscript, setShowTranscript] = useState(false);
   
   const { generatePodcast, isLoading, error } = usePodcastAPI();
 
@@ -45,13 +47,13 @@ export default function GenerePodcastPage() {
   const simulateProgress = () => {
     let currentProgress = 0;
     const interval = setInterval(() => {
-      currentProgress += 10;
+      currentProgress += 5;
       setProgress(currentProgress);
       
       if (currentProgress >= 100) {
         clearInterval(interval);
       }
-    }, 500);
+    }, 1500);
     return interval;
   };
 
@@ -66,14 +68,28 @@ export default function GenerePodcastPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setGenerationStatus('Préparation de la génération...');
+    setGenerationStatus('Préparation de la génération avec Vertex AI...');
     setProgress(0);
     setPodcastResult(null);
+    setShowTranscript(false);
     
     const progressInterval = simulateProgress();
     
     try {
-      // Appel à notre API REST fictive
+      // Statuts de progression simulés
+      setTimeout(() => {
+        setGenerationStatus('Analyse de vos critères de podcast...');
+      }, 2000);
+      
+      setTimeout(() => {
+        setGenerationStatus('Génération du script avec Gemini AI...');
+      }, 5000);
+      
+      setTimeout(() => {
+        setGenerationStatus('Finalisation du podcast...');
+      }, 15000);
+      
+      // Appel à notre API avec Vertex AI
       const result = await generatePodcast(formData);
       
       clearInterval(progressInterval);
@@ -82,7 +98,7 @@ export default function GenerePodcastPage() {
       setPodcastResult(result);
     } catch {
       clearInterval(progressInterval);
-      setGenerationStatus(`Erreur: ${error || 'Une erreur est survenue'}`);
+      setGenerationStatus(`Erreur: ${error || 'Une erreur est survenue lors de la génération'}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -93,6 +109,11 @@ export default function GenerePodcastPage() {
     setGenerationStatus(null);
     setProgress(0);
     setPodcastResult(null);
+    setShowTranscript(false);
+  };
+
+  const toggleTranscript = () => {
+    setShowTranscript(!showTranscript);
   };
 
   return (
@@ -101,7 +122,7 @@ export default function GenerePodcastPage() {
       <main className="flex-grow p-8">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-lg shadow p-6 mb-6">
-            <h1 className="text-2xl font-bold mb-6">Générateur de Podcast</h1>
+            <h1 className="text-2xl font-bold mb-6">Générateur de Podcast avec IA</h1>
             
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -186,7 +207,7 @@ export default function GenerePodcastPage() {
                       value={formData.guests}
                       onChange={handleChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="ex: John Doe, Jane Smith"
+                      placeholder="ex: Marie Dupont, Thomas Martin"
                     />
                   </div>
                   
@@ -224,7 +245,7 @@ export default function GenerePodcastPage() {
                       : 'bg-blue-600 hover:bg-blue-700'
                   }`}
                 >
-                  {isSubmitting ? 'Génération en cours...' : 'Générer le podcast'}
+                  {isSubmitting ? 'Génération avec Gemini en cours...' : 'Générer avec Gemini'}
                 </button>
               </div>
             </form>
@@ -279,7 +300,7 @@ export default function GenerePodcastPage() {
                   </div>
                 </div>
                 
-                <div className="mt-4">
+                <div className="mt-4 space-y-4">
                   <a 
                     href={podcastResult.url} 
                     target="_blank" 
@@ -288,6 +309,26 @@ export default function GenerePodcastPage() {
                   >
                     Télécharger le podcast
                   </a>
+                  
+                  {podcastResult.transcript && (
+                    <div>
+                      <button
+                        onClick={toggleTranscript}
+                        className="w-full bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-medium py-2 px-4 rounded text-center"
+                      >
+                        {showTranscript ? 'Masquer le script' : 'Afficher le script généré par IA'}
+                      </button>
+                      
+                      {showTranscript && (
+                        <div className="mt-4 bg-gray-50 p-4 rounded-md border border-gray-200">
+                          <h3 className="text-md font-semibold mb-3">Script du podcast</h3>
+                          <div className="whitespace-pre-line text-sm text-gray-800 leading-relaxed">
+                            {podcastResult.transcript}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -297,11 +338,11 @@ export default function GenerePodcastPage() {
             <h2 className="text-lg font-semibold mb-4">Comment ça marche ?</h2>
             <ol className="list-decimal list-inside space-y-2 text-gray-700">
               <li>Remplissez le formulaire avec les détails de votre podcast</li>
-              <li>Cliquez sur &quot;Générer le podcast&quot; pour lancer le processus</li>
-              <li>Notre API analyse vos informations et génère un podcast personnalisé</li>
-              <li>Une fois terminé, vous pourrez télécharger votre podcast</li>
+              <li>Cliquez sur &quot;Générer avec Gemini&quot; pour lancer le processus</li>
+              <li>Google Vertex AI analyse vos informations et crée un script complet pour votre podcast</li>
+              <li>Une fois terminé, vous pouvez télécharger votre podcast et consulter le script</li>
             </ol>
-            <p className="mt-4 text-sm text-gray-500">Note: Cette fonctionnalité est une démonstration. Dans une application réelle, le podcast serait généré par une IA et livré sous forme de fichier audio.</p>
+            <p className="mt-4 text-sm text-gray-500">Cette fonctionnalité utilise Gemini via Firebase Vertex AI pour générer des scripts de podcast personnalisés basés sur vos critères. Dans une application complète, ce script pourrait être transformé en audio avec des voix synthétiques ou servir de guide pour l&apos;enregistrement.</p>
           </div>
         </div>
       </main>
