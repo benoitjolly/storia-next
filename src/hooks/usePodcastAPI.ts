@@ -65,6 +65,15 @@ CONTEXTE:
 - Durée cible: ${data.duration} minutes (approximativement ${parseInt(data.duration) * 150} mots)
 - Invités: ${guestsList}
 - Sujets principaux: ${topicsList}
+- Date actuelle: ${new Date().toLocaleDateString('fr-FR')}
+
+CONTENU FACTUEL:
+- Utilise des faits et événements réels et récents (dernière année) liés au sujet du podcast.
+- Cite des données, statistiques et sources spécifiques (ex: "Selon une étude de [organisation] publiée en [date]...")
+- Mentionne des tendances actuelles et événements d'actualité pertinents pour le sujet.
+- Si tu mentionnes des entreprises, des produits ou des personnes, utilise des informations précises et vérifiables.
+- Pour les sujets économiques ou financiers, inclus des chiffres réels récents (indices boursiers, taux, croissance...).
+- Évite les généralités vagues et privilégie les exemples concrets et factuels.
 
 INSTRUCTIONS:
 1. Crée un script de podcast complet dans un format de dialogue avec:
@@ -74,23 +83,24 @@ INSTRUCTIONS:
    - Une introduction et une conclusion clairement définies
 
 2. Structure:
-   - Introduction captivante (10% du temps)
-   - Discussion des sujets principaux avec des exemples concrets (75% du temps)
-   - Conclusion résumant les points clés (15% du temps)
+   - Introduction captivante présentant des faits d'actualité récents (10% du temps)
+   - Discussion des sujets principaux avec des exemples concrets et des faits vérifiables (75% du temps)
+   - Conclusion résumant les points clés et les sources citées (15% du temps)
 
 3. Style et ton:
    - Ton conversationnel, naturel et engageant
    - Langage accessible mais informatif
    - Humour léger quand approprié
-   - Questions pertinentes et réponses détaillées
-   - Inclure quelques anecdotes ou exemples concrets
+   - Questions pertinentes et réponses détaillées basées sur des faits réels
+   - Inclure des anecdotes ou exemples concrets tirés de l'actualité récente
 
 4. Format:
    - Format de script avec les noms des intervenants en début de ligne
    - ALEX: pour l'animateur
    - NOM_INVITÉ: pour chaque invité
+   - Inclure des références à l'actualité avec des formulations comme "Comme nous l'avons vu récemment..." ou "Selon les dernières informations..."
 
-Génère un podcast informatif, divertissant et qui semble authentique, comme une véritable conversation.`;
+Génère un podcast informatif, factuel et qui semble authentique, comme une véritable conversation entre experts s'appuyant sur des données réelles et récentes.`;
   };
 
   /**
@@ -103,10 +113,10 @@ Génère un podcast informatif, divertissant et qui semble authentique, comme un
       
       // Create a GenerativeModel instance
       const model = getGenerativeModel(vertexAI, { 
-        model: "gemini-2.5-pro-exp-03-25",
+        model: "gemini-2.5-pro-preview-03-25",
         generationConfig: {
           temperature: 0.7,
-          maxOutputTokens: 2048,
+          maxOutputTokens: 8192,
           topP: 0.95,
           topK: 40
         }
